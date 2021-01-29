@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"gofirebase/api"
 	"gofirebase/config"
 
 	"github.com/gin-gonic/gin"
@@ -13,6 +13,16 @@ func main() {
 
 	//create/configure database instance
 	db := config.SetupDB()
-	fmt.Println(db)
+
+	//set db to gin context with a middleware to all incoming request
+	r.Use(func(c *gin.Context) {
+		c.Set("db", db)
+	})
+
+	//routes definition for finding and creating artists
+	r.GET("/artist", api.FindArtists)
+	r.POST("/artist", api.CreateArtist)
+
+	//start server
 	r.Run(":5000")
 }

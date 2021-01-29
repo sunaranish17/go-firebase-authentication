@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"gofirebase/api"
 	"log"
 
 	"gorm.io/driver/mysql"
@@ -24,6 +25,9 @@ func SetupDB() *gorm.DB {
 	if err != nil {
 		panic(err.Error())
 	}
+
+	//migrate our Artist model
+	db.AutoMigrate(&api.Artist{})
 
 	return db
 }
