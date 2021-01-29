@@ -10,7 +10,7 @@ import (
 )
 
 func SetupFirebase() *auth.Client {
-	serviceAccountKeyFilePath, err := filepath.Abs("./serviceAccountKey.js")
+	serviceAccountKeyFilePath, err := filepath.Abs("./serviceAccountKey.json")
 	if err != nil {
 		panic("Unable to load serviceAccountKey.json file")
 	}
