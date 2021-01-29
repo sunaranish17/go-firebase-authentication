@@ -2,38 +2,28 @@ package config
 
 import (
 	"fmt"
+	"log"
 
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
+//SetupDB -> database configuration
+func SetupDB() *gorm.DB {
+	USER := "root"
+	PASS := "admin123"
+	HOST := "localhost"
+	PORT := "3306"
+	DBNAME := "go_firebase"
 
-type DBConfig struct {
-	Host     string
-	Port     int
-	User     string
-	Password string
-	DBName   string
-}
+	URL := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", USER, PASS, HOST, PORT, DBNAME)
 
-func BuildDBConfig() *DBConfig {
-	dbConfig := DBConfig{
-		Host:     "localhost",
-		Port:     3306,
-		User:     "root",
-		Password: "admin123",
-		DBName:   "go_firebase",
+	log.Print("url", URL)
+	db, err := gorm.Open(mysql.Open(URL), &gorm.Config{})
+
+	if err != nil {
+		panic(err.Error())
 	}
-	return &dbConfig
-}
 
-func DbURL(dbConfig *DBConfig) string {
-	return fmt.Sprintf(
-		"%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
-		dbConfig.User,
-		dbConfig.Password,
-		dbConfig.Host,
-		dbConfig.Port,
-		dbConfig.DBName,
-	)
+	return db
 }
